@@ -10,7 +10,10 @@ appointments — no manual back-and-forth needed.
 [Watch Demo Video](https://www.loom.com/share/6b64a4989553446fb6e5be8528893edf)
 
 ## Screenshots
-(drag and drop your images here)
+<img width="1908" height="1098" alt="ai1" src="https://github.com/user-attachments/assets/946e9d31-73f8-4b73-b149-a6973018698c" />
+<img width="1918" height="1068" alt="ai2" src="https://github.com/user-attachments/assets/79a81196-0207-4a18-ba2d-825df118bf61" />
+<img width="1916" height="1093" alt="ai3" src="https://github.com/user-attachments/assets/116e84e1-eb0b-43de-9fda-df8afd4eb443" />
+<img width="1206" height="679" alt="ai4" src="https://github.com/user-attachments/assets/e9ec76a4-bd76-498a-a45a-c2592ccc4659" />
 
 ## How It Works
 1. User sends a booking request via the website chat
