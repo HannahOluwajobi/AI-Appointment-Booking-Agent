@@ -1,4 +1,3 @@
-# AI-Appointment-Booking-Agent
 # AI Appointment Booking Agent
 
 Built a conversational AI agent for a client, 
