@@ -1,0 +1,163 @@
+{
+  "name": "calander",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "=You are an efficient and courteous assistant tasked with scheduling appointments with Al Workshop.\n\nWhen users mention an appointment or meeting, they are referring to a meeting with al Workshop.\nWhen users refer to the calendar or \"your schedule,\" they are referring to Al Workshop's calendar.\n\nYou can use various tools to access and manage Al Workshop's calendar. Your primary goal is to assist users in successfully booking an appointment with Al Workshop, ensuring no scheduling conflicts. Only book an appointment if the requested time slot is available (the tool may refer to this as \"Free\")\n\nAlways respond in Nigeria, Utc +1\n\ntoday's date 27th may 2026 {{ $today.format('yyyy-MM-dd')}}\n\nAppointment are always 30 minutes in length.\n\nProvide accurate information at all times. If the tools are not functioning correctly, inform the user that you are unable to assist them at the moment."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -48,
+        -64
+      ],
+      "id": "a6b86f98-6698-4f4b-91e9-1b5d43f5e1c9",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4-turbo",
+          "mode": "list",
+          "cachedResultName": "gpt-4-turbo"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -96,
+        96
+      ],
+      "id": "bac49512-afa2-4fec-b46e-975fbefe5de4",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "plI7jvEA86Ed6L6Q",
+          "name": "realacct"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -304,
+        -48
+      ],
+      "id": "cb585d32-073a-4c96-bb6b-dcc63503378a",
+      "name": "When chat message received",
+      "webhookId": "50302fbd-f181-46d1-9405-1a23ca34bc82"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        48,
+        96
+      ],
+      "id": "61e64559-da3b-4a21-8510-ac9360491ad0",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "toolDescription": "=Call this tool to get the appointment availability for a particular period on the calendar. The tool may refer to availability as \"Free\" or \"Busy\".\n\nUse {timeMin} and {timeMax} to specify the window for the availability query. For example, to get availability for May 20, 2026 in New York, you could set:\n\n{timeMin} to 2026-05-20T09:00:00-04:00\n{timeMax} to 2026-05-20T18:00:00-04:00\n\nIf the tool returns an empty response, it means that something went wrong. It does not mean that there is no availability.",
+        "method": "POST",
+        "url": "https://www.googleapis.com/calendar/v3/freeBusy",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleCalendarOAuth2Api",
+        "sendBody": true,
+        "contentType": "=json",
+        "specifyBody": "json",
+        "bodyParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "jsonBody": "={\n  \"timeMin\": \"{{ $fromAI('timeMin') }}\",\n  \"timeMax\": \"{{ $fromAI('timeMax') }}\",\n  \"items\": [{\"id\": \"primary\"}]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        96
+      ],
+      "id": "dbb95b14-2e74-4a14-8001-0b97bfe248a2",
+      "name": "get calander availability",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "FUAEI76cg5EaY6go",
+          "name": "Google Calendar account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get calander availability": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "8a89fb58-c787-48d2-b8f1-a1b398de6da9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "6040395210b1afe0f21dcc600c58ce1093c742553b17e4511d1482531194de18"
+  },
+  "id": "hBUIB0zC0d34J0Zh",
+  "tags": []
+}
